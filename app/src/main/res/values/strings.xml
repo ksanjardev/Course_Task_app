@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Course Task app</string>
+
+    <!-- OnBoarding Screen -->
+    <string name="coursesTitle">Тысячи курсов в одном месте</string>
+    <string name="next">Продолжить</string>
+    <string name="thousand_course_title_img">Thousand course title</string>
+
+    <!-- Login Screen -->
+    <string name="email">Email</string>
+    <string name="email_hint">example@gmail.com</string>
+    <string name="password">Пароль</string>
+    <string name="password_hint">Введите пароль</string>
+    <string name="forgot_password">Забыл пароль</string>
+    <string name="no_account">Нету аккаунта?</string>
+    <string name="register">Региcтрация</string>
+    <string name="login">Вход</string>
+    <string name="home">Главная</string>
+    <string name="favourite">Избранное</string>
+    <string name="accaunt">Аккаунт</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

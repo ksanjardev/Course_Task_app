@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<style name="AppButton" parent="androidx.appcompat.widget.AppCompatButton">
+        <item name="android:backgroundTint">#12B956</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:fontFamily">@font/roboto_condensed_medium</item>
+    </style>-->
+</resources>

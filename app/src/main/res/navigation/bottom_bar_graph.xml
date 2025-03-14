@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_bar_graph"
+    app:startDestination="@id/homeTab">
+
+    <fragment
+        android:id="@+id/homeTab"
+        android:name="uz.sanjar.coursetaskapp.HomeScreen"
+        android:label="home_screen"
+        tools:layout="@layout/home_screen" >
+        <action
+            android:id="@+id/action_homeScreen_to_courseDetailScreen"
+            app:destination="@id/courseDetailScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/favourite"
+        android:name="uz.sanjar.coursetaskapp.FavouriteScreen"
+        android:label="fragment_favourite_screen"
+        tools:layout="@layout/fragment_favourite_screen" />
+    <fragment
+        android:id="@+id/courseDetailScreen"
+        android:name="uz.sanjar.coursetaskapp.CourseDetailScreen"
+        android:label="course_detail_screen"
+        tools:layout="@layout/course_detail_screen" />
+</navigation>
