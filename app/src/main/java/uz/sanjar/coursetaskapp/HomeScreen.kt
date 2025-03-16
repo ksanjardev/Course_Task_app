@@ -1,59 +1,60 @@
 package uz.sanjar.coursetaskapp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
+import uz.sanjar.coursetaskapp.adapter.CourseAdapter
+import uz.sanjar.coursetaskapp.databinding.HomeScreenBinding
+import uz.sanjar.presenter.impl.CourseViewModelImpl
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class HomeScreen : Fragment(R.layout.home_screen) {
+    private val binding: HomeScreenBinding by viewBinding(HomeScreenBinding::bind)
+    private val viewModel: CourseViewModelImpl by activityViewModels()
+    private val courseAdapter = CourseAdapter()
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeScreen.newInstance] factory method to
- * create an instance of this fragment.
- */
-class HomeScreen : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.sortCourses.isEnabled = false
+        binding.sortCourses.setTextColor(
+            ContextCompat.getColor(requireContext(), R.color.disabled_text)
+        )
+        observeLivedata()
+        setClickListeners()
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private fun observeLivedata() {
+        binding.rv.adapter = courseAdapter
+
+        viewModel.courses.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = if (it.isNullOrEmpty()) View.VISIBLE else View.GONE
+
+            courseAdapter.submitList(it)
+            val isEnabled = !it.isNullOrEmpty()
+            binding.sortCourses.isEnabled = isEnabled
+            binding.sortCourses.setTextColor(
+                if (isEnabled) requireContext().getColor(R.color.enabled_text)
+                else requireContext().getColor(R.color.disabled_text)
+            )
+        }
+        viewModel.errorMsg.observe(viewLifecycleOwner) {
+            Log.d("TTT", "observeLivedata: $it")
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.home_screen, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeScreen.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeScreen().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun setClickListeners() {
+        binding.sortCourses.setOnClickListener {
+            viewModel.onSortClick()
+        }
+        courseAdapter.onBookmarkClickListener = {
+            viewModel.onFavClick(it)
+        }
     }
 }

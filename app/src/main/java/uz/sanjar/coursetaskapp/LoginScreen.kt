@@ -1,59 +1,54 @@
 package uz.sanjar.coursetaskapp
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
+import uz.sanjar.coursetaskapp.databinding.LoginScreenBinding
+import uz.sanjar.presenter.impl.LoginViewModelImpl
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginScreen.newInstance] factory method to
- * create an instance of this fragment.
- */
-class LoginScreen : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class LoginScreen : Fragment(R.layout.login_screen) {
+    private val binding: LoginScreenBinding by viewBinding(LoginScreenBinding::bind)
+    private val viewModel: LoginViewModelImpl by viewModels()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.loginBtn.isEnabled = false
+        binding.okBtn.setOnClickListener { viewModel.onOKClick() }
+        binding.vkBtn.setOnClickListener { viewModel.onVkCLick() }
+        viewModel.navigatorUrlEvent.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                startActivity(intent)
+            }
+        }
+        setupValidation()
+        binding.loginBtn.setOnClickListener {
+            val sharedPref = requireContext().getSharedPreferences("app_pref", MODE_PRIVATE)
+            sharedPref.edit().putBoolean("is_first_time", false).apply()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            findNavController().navigate(LoginScreenDirections.actionLoginScreenToNavHome())
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.login_screen, container, false)
+    private fun setupValidation() {
+        binding.email.addTextChangedListener(afterTextChanged = { _ -> validateInputs() })
+        binding.passwordd.addTextChangedListener(afterTextChanged = { _ -> validateInputs() })
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginScreen.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginScreen().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun validateInputs() {
+        val email = binding.email.text.toString().trim()
+        val password = binding.passwordd.text.toString()
+        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+        val isValid = email.matches(emailRegex) && password.isNotEmpty()
+
+        binding.loginBtn.isEnabled = isValid
+
     }
 }

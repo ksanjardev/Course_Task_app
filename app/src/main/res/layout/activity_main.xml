@@ -23,9 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#4D555E"
+        app:itemBackground="@drawable/bottom_nav_icon_selector"
+        app:itemActiveIndicatorStyle="@style/CustomNavigationBarActiveIndicator"
+        app:itemRippleColor="@color/bottom_nav_ripple"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="#12B956"
-        app:itemTextColor="#12B956"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Course Task app"
 include(":app")
- 
+include(":entity")
+include(":presenter")
+include(":common")

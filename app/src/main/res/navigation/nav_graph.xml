@@ -21,11 +21,13 @@
         tools:layout="@layout/login_screen">
         <action
             android:id="@+id/action_loginScreen_to_nav_home"
-            app:destination="@id/nav_home" />
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
     <navigation
         android:id="@+id/nav_home"
-        app:startDestination="@+id/homeTab">
+        app:startDestination="@+id/bottom_bar_graph">
         <include app:graph="@navigation/bottom_bar_graph" />
     </navigation>
 </navigation>

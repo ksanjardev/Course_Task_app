@@ -7,4 +7,5 @@
         <item name="android:paddingVertical">10dp</item>
         <item name="android:fontFamily">@font/roboto_condensed_medium</item>
     </style>-->
+
 </resources>
